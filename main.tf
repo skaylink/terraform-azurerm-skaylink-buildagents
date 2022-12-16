@@ -31,7 +31,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "adoagents" {
     publisher = var.source_image_reference.publisher
     offer     = var.source_image_reference.offer
     sku       = var.source_image_reference.sku
-    version   = var.source_image_reference.latest
+    version   = "latest"
   }
 
   sku = var.sku

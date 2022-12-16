@@ -1,8 +1,5 @@
-# Skaylink Terraform module template
-
-This template repository is used as the baseline for Skaylink Terraform modules, please use this as your starting point when building new (public) modules.
-
-Currently this repository is set to be private, but any repos you want to deploy as a module need to be public.
+# Skaylink Terraform azurerm build agent module
+This repository contains the code for the Skaylink Terraform azurerm build agent module, which can be used for provisioning self-hosted build agents in your environment.
 
 ## Process
 

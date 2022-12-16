@@ -15,14 +15,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # For questions and contributions please contact info@iq3cloud.com
-
-variable "agent" {
-  type = any
-}
-
 variable "agent_name" {
   type        = string
-  description = "The name of the agent to be initialized "
+  description = "The name of the agent to be provisioned"
 }
 
 variable "resource_group_name" {
@@ -70,12 +65,15 @@ variable "sku" {
 }
 
 variable "source_image_reference" {
-  type        = object
+  type = object({
+    publisher = string
+    offer     = string
+    sku       = string
+  })
   description = "Parameters for the source image of the Virtual Machine"
   default = {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-focal"
     sku       = "20_04-lts"
-    version   = "latest"
   }
 }
