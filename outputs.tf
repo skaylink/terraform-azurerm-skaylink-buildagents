@@ -4,7 +4,7 @@ output "vm_scale_set_name" {
 }
 
 output "admin_password" {
-  value = random_password.adoagents_password.result
+  value       = random_password.adoagents_password.result
   description = "The password of the administrator on each Virtual Machine Scale Set instance"
-  sensitive = true
+  sensitive   = true
 }
