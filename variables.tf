@@ -16,38 +16,66 @@
 
 # For questions and contributions please contact info@iq3cloud.com
 
-variable "name" {
+variable "agent" {
+  type = any
+}
+
+variable "agent_name" {
   type        = string
-  description = "The name of the resource group you are deploying"
+  description = "The name of the agent to be initialized "
+}
+
+variable "resource_group_name" {
+  type        = string
+  description = "The resource group in which the agent should be provisioned"
 }
 
 variable "location" {
   type        = string
-  description = "The location of the resource group, defaults to west Europe"
-  default     = "westeurope"
+  description = "The region in which the agent is provisioned"
 }
 
-variable "customTag1" {
+variable "subnet_id" {
   type        = string
-  description = "the first customTag"
+  description = "The subnet of the virtual network in which the agent should be deployed"
 }
 
-variable "customTag2" {
+variable "cloud_init_config" {
   type        = string
-  description = "the second customTag"
+  description = "A cloud init config for startup configuration"
 }
 
-variable "customTag3" {
-  type        = string
-  description = "the third customTag"
+variable "disable_password_authentication" {
+  type        = bool
+  description = "Should Password Authentication be disabled on this Virtual Machine Scale Set?"
+  default     = false
 }
 
-variable "customTag4" {
+variable "admin_username" {
   type        = string
-  description = "the fourth customTag"
+  description = "The username of the administrator on each Virtual Machine Scale Set instance"
+  default     = "azureuser"
 }
 
-variable "customTag5" {
+variable "computer_name_prefix" {
   type        = string
-  description = "the fifth customTag"
+  description = "A prefix which should be used by the Virtual Machines in the Scale Set"
+  default     = "agents"
+}
+
+variable "sku" {
+  type        = string
+  description = "The Virtual Machine SKU for the Scale Set"
+  default     = "Standard_B2s"
+}
+
+variable "source_image_reference" {
+  type        = object
+  description = "Parameters for the source image of the Virtual Machine"
+  default = {
+    publisher = "Canonical"
+    offer     = "0001-com-ubuntu-server-focal"
+    sku       = "20_04-lts"
+    version   = "latest"
+  }
 }
