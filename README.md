@@ -1,19 +1,95 @@
-# Skaylink Terraform module template
+# Skaylink Terraform azurerm build agent module
 
-This template repository is used as the baseline for Skaylink Terraform modules, please use this as your starting point when building new (public) modules.
+This repository contains the code for the Skaylink Terraform azurerm build agent module, which can be used for provisioning self-hosted build agents in your environment.
 
-Currently this repository is set to be private, but any repos you want to deploy as a module need to be public.
+## Usage
 
-## Process
+An example usage of the module is provided below, here a VNet has been provisioned using the [skaylink-vnet](https://registry.terraform.io/modules/skaylink/skaylink-vnet/azurerm/latest) module. In the example a cloud config file called `cloud-init.conf` file is given as input:
 
-To create a new module, simply create a new repository from this template, build on it, and deploy it to the Terraform registry.
+```terraform
+resource "azurerm_resource_group" "agent" {
+  name     = "buildagent-rg"
+  location = "West Europe" 
+}
 
-It is important to note that the template is a private repo, but the finished module has to be public. Do not remove the license file or the intro on the files. If you need to add more files, always add the license text first.
+module "buildagents" {
+  source              = "skaylink/skaylink-buildagents/azurerm"
+  version             = "latest"
 
-## Checks
+  vm_scale_set_name   = "agent-vmss"
+  resource_group_name = azurerm_resource_group.agent.name
+  location            = azurerm_resource_group.agent.location
+  subnet_id           = module.vnet.subnets["agents"].id
+  cloud_init_config   = file("${path.root}/cloud-init.conf)
+}
+```
 
-We automatically run checks using GitHub workflows which ensures formatting, validation and vulnerebility checks are run.
+An example of a cloud config file can be seen below:
 
-## Support
+```config
+#cloud-config
 
-If you need any support or guidance, don't hesitate to reach out to the Cloud Care team.
+# Workaround to make sure cloud-init is finished before the Azure DevOps extention starts
+# https://stackoverflow.com/a/64017615
+bootcmd:
+    - mkdir -p /etc/systemd/system/walinuxagent.service.d
+    - echo "[Unit]\nAfter=cloud-final.service" > /etc/systemd/system/walinuxagent.service.d/override.conf
+    - sed "s/After=multi-user.target//g" /lib/systemd/system/cloud-final.service > /etc/systemd/system/cloud-final.service
+    - systemctl daemon-reload
+
+apt:
+    preserve_sources_list: true
+    sources:
+        microsoft-azurecli.list:
+            source: "deb https://packages.microsoft.com/repos/azure-cli focal main"
+            key: |
+                -----BEGIN PGP PUBLIC KEY BLOCK-----
+                Version: GnuPG v1.4.7 (GNU/Linux)
+
+                mQENBFYxWIwBCADAKoZhZlJxGNGWzqV+1OG1xiQeoowKhssGAKvd+buXCGISZJwT
+                LXZqIcIiLP7pqdcZWtE9bSc7yBY2MalDp9Liu0KekywQ6VVX1T72NPf5Ev6x6DLV
+                7aVWsCzUAF+eb7DC9fPuFLEdxmOEYoPjzrQ7cCnSV4JQxAqhU4T6OjbvRazGl3ag
+                OeizPXmRljMtUUttHQZnRhtlzkmwIrUivbfFPD+fEoHJ1+uIdfOzZX8/oKHKLe2j
+                H632kvsNzJFlROVvGLYAk2WRcLu+RjjggixhwiB+Mu/A8Tf4V6b+YppS44q8EvVr
+                M+QvY7LNSOffSO6Slsy9oisGTdfE39nC7pVRABEBAAG0N01pY3Jvc29mdCAoUmVs
+                ZWFzZSBzaWduaW5nKSA8Z3Bnc2VjdXJpdHlAbWljcm9zb2Z0LmNvbT6JATUEEwEC
+                AB8FAlYxWIwCGwMGCwkIBwMCBBUCCAMDFgIBAh4BAheAAAoJEOs+lK2+EinPGpsH
+                /32vKy29Hg51H9dfFJMx0/a/F+5vKeCeVqimvyTM04C+XENNuSbYZ3eRPHGHFLqe
+                MNGxsfb7C7ZxEeW7J/vSzRgHxm7ZvESisUYRFq2sgkJ+HFERNrqfci45bdhmrUsy
+                7SWw9ybxdFOkuQoyKD3tBmiGfONQMlBaOMWdAsic965rvJsd5zYaZZFI1UwTkFXV
+                KJt3bp3Ngn1vEYXwijGTa+FXz6GLHueJwF0I7ug34DgUkAFvAs8Hacr2DRYxL5RJ
+                XdNgj4Jd2/g6T9InmWT0hASljur+dJnzNiNCkbn9KbX7J/qK1IbR8y560yRmFsU+
+                NdCFTW7wY0Fb1fWJ+/KTsC4=
+                =J6gs
+                -----END PGP PUBLIC KEY BLOCK-----
+        microsoft-prod.list:
+            source: "deb https://packages.microsoft.com/ubuntu/20.04/prod focal main"
+            key: |
+                -----BEGIN PGP PUBLIC KEY BLOCK-----
+                Version: GnuPG v1.4.7 (GNU/Linux)
+
+                mQENBFYxWIwBCADAKoZhZlJxGNGWzqV+1OG1xiQeoowKhssGAKvd+buXCGISZJwT
+                LXZqIcIiLP7pqdcZWtE9bSc7yBY2MalDp9Liu0KekywQ6VVX1T72NPf5Ev6x6DLV
+                7aVWsCzUAF+eb7DC9fPuFLEdxmOEYoPjzrQ7cCnSV4JQxAqhU4T6OjbvRazGl3ag
+                OeizPXmRljMtUUttHQZnRhtlzkmwIrUivbfFPD+fEoHJ1+uIdfOzZX8/oKHKLe2j
+                H632kvsNzJFlROVvGLYAk2WRcLu+RjjggixhwiB+Mu/A8Tf4V6b+YppS44q8EvVr
+                M+QvY7LNSOffSO6Slsy9oisGTdfE39nC7pVRABEBAAG0N01pY3Jvc29mdCAoUmVs
+                ZWFzZSBzaWduaW5nKSA8Z3Bnc2VjdXJpdHlAbWljcm9zb2Z0LmNvbT6JATUEEwEC
+                AB8FAlYxWIwCGwMGCwkIBwMCBBUCCAMDFgIBAh4BAheAAAoJEOs+lK2+EinPGpsH
+                /32vKy29Hg51H9dfFJMx0/a/F+5vKeCeVqimvyTM04C+XENNuSbYZ3eRPHGHFLqe
+                MNGxsfb7C7ZxEeW7J/vSzRgHxm7ZvESisUYRFq2sgkJ+HFERNrqfci45bdhmrUsy
+                7SWw9ybxdFOkuQoyKD3tBmiGfONQMlBaOMWdAsic965rvJsd5zYaZZFI1UwTkFXV
+                KJt3bp3Ngn1vEYXwijGTa+FXz6GLHueJwF0I7ug34DgUkAFvAs8Hacr2DRYxL5RJ
+                XdNgj4Jd2/g6T9InmWT0hASljur+dJnzNiNCkbn9KbX7J/qK1IbR8y560yRmFsU+
+                NdCFTW7wY0Fb1fWJ+/KTsC4=
+                =J6gs
+                -----END PGP PUBLIC KEY BLOCK-----
+packages:
+    - unzip
+    - git
+    - wget
+    - apt-transport-https
+    - software-properties-common
+    - azure-cli
+    - powershell
+```
