@@ -17,7 +17,7 @@
 # For questions and contributions please contact info@iq3cloud.com
 
 resource "random_password" "adoagents_password" {
-  length  = 16
+  length  = 30
   special = true
 }
 
@@ -31,7 +31,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "adoagents" {
     publisher = var.source_image_reference.publisher
     offer     = var.source_image_reference.offer
     sku       = var.source_image_reference.sku
-    version   = "latest"
+    version   = var.source_image_reference.version
   }
 
   sku = var.sku

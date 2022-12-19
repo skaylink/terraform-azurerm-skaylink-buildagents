@@ -69,11 +69,13 @@ variable "source_image_reference" {
     publisher = string
     offer     = string
     sku       = string
+    version   = string
   })
   description = "Parameters for the source image of the Virtual Machine"
   default = {
     publisher = "Canonical"
     offer     = "0001-com-ubuntu-server-focal"
     sku       = "20_04-lts"
+    version   = "latest"
   }
 }
