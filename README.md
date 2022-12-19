@@ -4,7 +4,7 @@ This repository contains the code for the Skaylink Terraform azurerm build agent
 
 ## Usage
 
-An example usage of the module is provided below, here a VNet has been provisioned using the [skaylink-vnet](https://registry.terraform.io/modules/skaylink/skaylink-vnet/azurerm/latest) module. In the example a cloud config file called `agents-init.conf.tftpl` file is given as input:
+An example usage of the module is provided below, here a VNet has been provisioned using the [skaylink-vnet](https://registry.terraform.io/modules/skaylink/skaylink-vnet/azurerm/latest) module. In the example a cloud config file called `cloud-init.conf` file is given as input:
 
 ```terraform
 resource "azurerm_resource_group" "agent" {
@@ -20,7 +20,7 @@ module "buildagents" {
   resource_group_name = azurerm_resource_group.agent.name
   location            = azurerm_resource_group.agent.location
   subnet_id           = module.vnet.subnets["agents"].id
-  cloud_init_config   = templatefile("${path.root}/agents-init.conf.tftpl)
+  cloud_init_config   = file("${path.root}/cloud-init.conf)
 }
 ```
 
@@ -91,12 +91,4 @@ packages:
     - software-properties-common
     - azure-cli
     - powershell
-
-ca_certs:
-    trusted:
-%{ for cert_file in trusted_certificates ~}
-        - ${jsonencode(file(format("%s/%s", base_path, cert_file)))}
-%{ endfor ~}
 ```
-
-In the above cloud config file a list of certificate files and a path are accepted as input.
