@@ -25,7 +25,8 @@ module "buildagents" {
 ```
 
 An example of a cloud config file can be seen below:
-```
+
+```config
 #cloud-config
 
 # Workaround to make sure cloud-init is finished before the Azure DevOps extention starts
