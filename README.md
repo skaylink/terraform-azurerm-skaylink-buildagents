@@ -1,16 +1,25 @@
 # Skaylink Terraform azurerm build agent module
+
 This repository contains the code for the Skaylink Terraform azurerm build agent module, which can be used for provisioning self-hosted build agents in your environment.
 
-## Process
+## Usage
 
-To create a new module, simply create a new repository from this template, build on it, and deploy it to the Terraform registry.
+An example usage of the module is provided below, here a VNet has been provisioned using the [skaylink-vnet](https://registry.terraform.io/modules/skaylink/skaylink-vnet/azurerm/latest) module. In the example a cloud config file called `agents-init.conf.tftpl` file is given as input:
 
-It is important to note that the template is a private repo, but the finished module has to be public. Do not remove the license file or the intro on the files. If you need to add more files, always add the license text first.
+```terraform
+resource "azurerm_resource_group" "agent" {
+  name     = "buildagent-rg"
+  location = "West Europe" 
+}
 
-## Checks
+module "buildagents" {
+  source              = "skaylink/skaylink-buildagents/azurerm"
+  version             = "latest"
 
-We automatically run checks using GitHub workflows which ensures formatting, validation and vulnerebility checks are run.
-
-## Support
-
-If you need any support or guidance, don't hesitate to reach out to the Cloud Care team.
+  agent_name          = "agent-vmss"
+  resource_group_name = azurerm_resource_group.agent.name
+  location            = azurerm_resource_group.agent.location
+  subnet_id           = module.vnet.subnets["agents"].id
+  cloud_init_config   = base64encode(templatefile("${path.root}/agents-init.conf.tftpl)
+}
+```

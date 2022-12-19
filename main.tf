@@ -26,7 +26,6 @@ resource "azurerm_linux_virtual_machine_scale_set" "adoagents" {
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  # Skal tages imod som input
   source_image_reference {
     publisher = var.source_image_reference.publisher
     offer     = var.source_image_reference.offer
