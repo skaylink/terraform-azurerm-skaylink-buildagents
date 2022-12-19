@@ -16,7 +16,7 @@ module "buildagents" {
   source              = "skaylink/skaylink-buildagents/azurerm"
   version             = "latest"
 
-  agent_name          = "agent-vmss"
+  vm_scale_set_name   = "agent-vmss"
   resource_group_name = azurerm_resource_group.agent.name
   location            = azurerm_resource_group.agent.location
   subnet_id           = module.vnet.subnets["agents"].id

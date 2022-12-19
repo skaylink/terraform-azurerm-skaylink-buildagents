@@ -15,7 +15,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # For questions and contributions please contact info@iq3cloud.com
-variable "vm_scale_set_name " {
+variable "vm_scale_set_name" {
   type        = string
   description = "The name of the VMSS to be provisioned"
 }
