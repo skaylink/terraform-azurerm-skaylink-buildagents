@@ -42,7 +42,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "adoagents" {
   admin_password                  = random_password.adoagents_password.result
   disable_password_authentication = var.disable_password_authentication
 
-  custom_data = var.cloud_init_config
+  custom_data = base64encode(var.cloud_init_config)
 
   os_disk {
     caching              = "ReadWrite"

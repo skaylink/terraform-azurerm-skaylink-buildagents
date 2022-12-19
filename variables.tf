@@ -15,40 +15,40 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # For questions and contributions please contact info@iq3cloud.com
-variable "agent_name" {
+variable "vm_scale_set_name " {
   type        = string
-  description = "The name of the agent to be provisioned"
+  description = "The name of the VMSS to be provisioned"
 }
 
 variable "resource_group_name" {
   type        = string
-  description = "The resource group in which the agent should be provisioned"
+  description = "The resource group in which the VMSS should be provisioned"
 }
 
 variable "location" {
   type        = string
-  description = "The region in which the agent is provisioned"
+  description = "The region in which the VMSS is provisioned"
 }
 
 variable "subnet_id" {
   type        = string
-  description = "The subnet of the virtual network in which the agent should be deployed"
+  description = "The subnet of the virtual network in which the VMSS should be deployed"
 }
 
 variable "cloud_init_config" {
   type        = string
-  description = "A cloud init config for startup configuration"
+  description = "A cloud init config file for startup configuration"
 }
 
 variable "disable_password_authentication" {
   type        = bool
-  description = "Should Password Authentication be disabled on this Virtual Machine Scale Set?"
+  description = "Should Password Authentication be disabled on this VMSS?"
   default     = false
 }
 
 variable "admin_username" {
   type        = string
-  description = "The username of the administrator on each Virtual Machine Scale Set instance"
+  description = "The username of the administrator on each VMSS instance"
   default     = "azureuser"
 }
 
