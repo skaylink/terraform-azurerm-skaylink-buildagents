@@ -59,9 +59,9 @@ resource "azurerm_linux_virtual_machine_scale_set" "adoagents" {
     name    = "NetworkProfile"
     primary = true
     ip_configuration {
-      name      = "internal"
-      primary   = true
-      subnet_id = var.subnet_id
+      name                           = "internal"
+      primary                        = true
+      subnet_id                      = var.subnet_id
       application_security_group_ids = var.application_security_group_ids
     }
   }
