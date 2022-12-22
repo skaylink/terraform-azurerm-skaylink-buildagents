@@ -79,3 +79,9 @@ variable "source_image_reference" {
     version   = "latest"
   }
 }
+
+variable "application_security_group_ids" {
+  type        = list(string)
+  description = "Application Security Groups (ASGs) to associate with the Virtual Machine Scale Set"
+  default     = []
+}
