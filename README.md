@@ -14,7 +14,7 @@ resource "azurerm_resource_group" "agent" {
 
 module "buildagents" {
   source              = "skaylink/skaylink-buildagents/azurerm"
-  version             = "latest"
+  version             = "0.1.1"
 
   vm_scale_set_name   = "agent-vmss"
   resource_group_name = azurerm_resource_group.agent.name
