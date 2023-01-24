@@ -20,7 +20,7 @@ module "buildagents" {
   resource_group_name = azurerm_resource_group.agent.name
   location            = azurerm_resource_group.agent.location
   subnet_id           = module.vnet.subnets["agents"].id
-  cloud_init_config   = file("${path.root}/cloud-init.conf)
+  cloud_init_config   = file("${path.root}/cloud-init.conf")
 }
 ```
 
