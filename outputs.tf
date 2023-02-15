@@ -10,6 +10,6 @@ output "admin_password" {
 }
 
 output "scaleset" {
-  value = azurerm_linux_virtual_machine_scale_set.adoagents.name
+  value       = azurerm_linux_virtual_machine_scale_set.adoagents.name
   description = "The Azure Virtual Machine Scale Set"
 }
