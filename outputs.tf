@@ -8,3 +8,8 @@ output "admin_password" {
   description = "The password of the administrator on each VMSS instance"
   sensitive   = true
 }
+
+output "scaleset" {
+  value = azurerm_linux_virtual_machine_scale_set.adoagents.name
+  description = "The Azure Virtual Machine Scale Set"
+}
