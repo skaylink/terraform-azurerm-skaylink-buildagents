@@ -17,8 +17,9 @@
 # For questions and contributions please contact info@iq3cloud.com
 
 resource "random_password" "adoagents_password" {
-  length  = 30
-  special = true
+  length           = 30
+  special          = true
+  override_special = "<>&"
 }
 
 resource "azurerm_linux_virtual_machine_scale_set" "adoagents" {
