@@ -9,7 +9,7 @@ output "admin_password" {
   sensitive   = true
 }
 
-output "scaleset" {
-  value       = azurerm_linux_virtual_machine_scale_set.adoagents.name
-  description = "The Azure Virtual Machine Scale Set"
+output "vm_scale_set_id" {
+  value       = azurerm_linux_virtual_machine_scale_set.adoagents.id
+  description = "The resource id of the VMSS"
 }
