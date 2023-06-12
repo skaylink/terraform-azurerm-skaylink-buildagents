@@ -20,6 +20,10 @@ resource "random_password" "adoagents_password" {
   length           = 30
   special          = true
   override_special = "<>&"
+
+  lifecycle {
+    ignore_changes = [override_special]
+  }
 }
 
 resource "azurerm_linux_virtual_machine_scale_set" "adoagents" {
