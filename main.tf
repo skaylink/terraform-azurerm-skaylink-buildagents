@@ -116,7 +116,7 @@ resource "azurerm_virtual_machine_scale_set_extension" "adoagents_changetrack" {
   automatic_upgrade_enabled    = true
 
   depends_on = [
-    azurerm_virtual_machine_scale_set_extension.adoagents_changetrack
+    azurerm_virtual_machine_scale_set_extension.adoagents_monitor
   ]
 }
 
@@ -130,6 +130,6 @@ resource "azurerm_virtual_machine_scale_set_extension" "adoagents_dependency" {
   automatic_upgrade_enabled    = true
 
   depends_on = [
-    azurerm_virtual_machine_scale_set_extension.adoagents_dependency
+    azurerm_virtual_machine_scale_set_extension.adoagents_changetrack
   ]
 }
