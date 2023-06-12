@@ -100,6 +100,10 @@ resource "azurerm_virtual_machine_scale_set_extension" "adoagents_monitor" {
   type_handler_version         = "1.0"
   auto_upgrade_minor_version   = true
   automatic_upgrade_enabled    = true
+
+  depends_on = [
+    azurerm_virtual_machine_scale_set_extension.adoagents_health
+  ]
 }
 
 resource "azurerm_virtual_machine_scale_set_extension" "adoagents_changetrack" {
@@ -110,6 +114,10 @@ resource "azurerm_virtual_machine_scale_set_extension" "adoagents_changetrack" {
   type_handler_version         = "1.0"
   auto_upgrade_minor_version   = true
   automatic_upgrade_enabled    = true
+
+  depends_on = [
+    azurerm_virtual_machine_scale_set_extension.adoagents_monitor
+  ]
 }
 
 resource "azurerm_virtual_machine_scale_set_extension" "adoagents_dependency" {
@@ -120,4 +128,8 @@ resource "azurerm_virtual_machine_scale_set_extension" "adoagents_dependency" {
   type_handler_version         = "9.1"
   auto_upgrade_minor_version   = true
   automatic_upgrade_enabled    = true
+
+  depends_on = [
+    azurerm_virtual_machine_scale_set_extension.adoagents_changetrack
+  ]
 }
